@@ -9,18 +9,26 @@
         }
 
         .container {
-            max-width: 98%; /* Modification ici pour prendre toute la largeur */
+            max-width: 98%;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: none;
             border-radius: 8px;
+            color: white;
         }
 
         h2 {
             font-size: 1.5rem;
             color: #3490dc;
             margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .roomCard {
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            column-gap: 15px;
         }
 
         .success-message {
@@ -37,7 +45,8 @@
             margin-top: 1.5rem;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
@@ -48,7 +57,8 @@
             color: #ffffff;
         }
 
-        .btn-edit, .btn-delete {
+        .btn-edit,
+        .btn-delete {
             display: inline-block;
             padding: 8px 16px;
             border-radius: 4px;
@@ -86,8 +96,8 @@
             color: #ffffff;
             background-color: #3490dc;
             transition: background-color 0.3s;
-            width: 100%; /* Modification ici pour prendre toute la largeur */
-            text-align: center; /* Pour centrer le texte */
+            width: 100%;
+            text-align: center;
         }
 
         .add-button:hover {
@@ -97,45 +107,70 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto bg-white p-4 shadow-md mb-4">
-        <h2 class="text-2xl font-semibold">Liste des salles</h2>
+    @auth
+        <div class="container mx-auto dark:bg-gray-800 p-4 shadow-md mb-4">
+            <h2 class="text-2xl font-semibold">Liste des salles</h2>
 
-        @if(session('success'))
-            <div class="success-message">{{ session('success') }}</div>
-        @endif
+            @if (session('success'))
+                <div class="success-message">{{ session('success') }}</div>
+            @endif
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom salle</th>
-                    <th>Nombre de places prises</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($salles as $salle)
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ $salle->nom }}</td>
-                        <td>{{ $salle->actual_user }}/{{ $salle->max_user }}</td>
-                        <td>
-                            <div class="space-x-2">
-                                <a href="{{ route('gestion-salles.edit', $salle->id) }}" class="btn-edit">Modifier</a>
-                                <form action="{{ route('gestion-salles.destroy', $salle->id) }}" method="post" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-delete">Supprimer</button>
-                                </form>
-                            </div>
-                        </td>
+                        <th>Nom salle</th>
+                        <th>Nombre de places prises</th>
+                        <th>Action</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="text-center py-4">Aucune salle disponible.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse($salles as $salle)
+                        <tr>
+                            <td>{{ $salle->nom }}</td>
+                            <td>{{ $salle->actual_user }}/{{ $salle->max_user }}</td>
+                            <td>
+                                <div class="space-x-2">
+                                    <a href="{{ route('gestion-salles.edit', $salle->id) }}" class="btn-edit">Modifier</a>
+                                    <form action="{{ route('gestion-salles.destroy', $salle->id) }}" method="post" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-delete">Supprimer</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="text-center py-4">Aucune salle disponible.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <div style="width: 200px">
+                <a href="{{ route('gestion-salles.create') }}" class="add-button mt-4">Ajouter une
+                    salle
+                </a>
+            </div>
+        </div>
+    @else
+        <div class="container mx-auto p-4 shadow-md mb-4">
+            <h2 class="text-2xl font-semibold">Liste des salles</h2>
 
-        <a href="{{ route('gestion-salles.create') }}" class="add-button mt-4">Ajouter une salle</a>
-    </div>
+            <div class="grid grid-cols-3 gap-4">
+                @foreach ($salles as $salle)
+                    <div class="roomCard bg-white p-4 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-12 h-12">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold">{{ $salle->nom }}</h3>
+                            <p>{{ $salle->actual_user }}/{{ $salle->max_user }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endauth
 @endsection

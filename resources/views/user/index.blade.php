@@ -9,18 +9,19 @@
         }
 
         .container {
-            max-width: 98%; /* Modification ici pour prendre toute la largeur */
-            margin: 20px auto; /* Ajout de l'espace en haut */
+            max-width: 98%;
+            margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            color: white;
         }
 
         h2 {
             font-size: 1.5rem;
             color: #3490dc;
             margin-bottom: 1.5rem;
+            text-align: center;
         }
 
         .success-message {
@@ -37,7 +38,8 @@
             margin-top: 1.5rem;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
@@ -88,30 +90,30 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <h2 class="text-2xl font-semibold">Liste des utilisateurs</h2>
+    <div class="container mx-auto dark:bg-gray-800 p-4 shadow-md mb-4">
+        <h2 class="text-2xl font-semibold">Liste des étudiants</h2>
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="success-message">{{ session('success') }}</div>
         @endif
 
         <table>
             <thead>
                 <tr>
-                    <th>Nom utilisateur</th>
+                    <th>Nom de l'étudiant</th>
                     <th>Badge</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $user)
+                @foreach ($students as $student)
                     <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->badge }}</td>
+                        <td>{{ $student->name }}</td>
+                        <td>{{ $student->badge }}</td>
                         <td>
                             <div class="space-x-2">
-                                <a href="{{ route('user.edit', $user->id) }}" class="btn btn-edit">Modifier</a>
-                                <form action="{{ route('user.destroy', $user->id) }}" method="post" class="inline">
+                                <a href="{{ route('user.edit', $student->id) }}" class="btn btn-edit">Modifier</a>
+                                <form action="{{ route('user.destroy', $student->id) }}" method="post" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-delete">Supprimer</button>

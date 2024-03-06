@@ -4,58 +4,31 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\GestionSallesController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudentController;
 
+Route::get('/', [GestionSallesController::class, 'index']);
+Route::match(['get', 'post'], '/apirequest', [ApiController::class, 'index']);
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// API CONNEXION NON SECURE
-Route::post('/apirequest', [ApiController::class, 'index']);
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/gestion-salles', [GestionSallesController::class, 'index'])->name('gestion-salles.index');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // new routes
+    Route::prefix('gestion-salles')->name('gestion-salles.')->group(function () {
+        Route::get('/create', [GestionSallesController::class, 'create'])->name('create');
+        Route::post('/', [GestionSallesController::class, 'store'])->name('store');
+        Route::get('/{salle}/edit', [GestionSallesController::class, 'edit'])->name('edit');
+        Route::put('/{salle}', [GestionSallesController::class, 'update'])->name('update');
+        Route::delete('/{salle}', [GestionSallesController::class, 'destroy'])->name('destroy');
+    });
 
-    // Partie Salles
-    Route::get('/gestion-salles', [GestionSallesController::class, 'index'])->name('gestion-salles.index');
-
-    Route::get('/gestion-salles/create', [GestionSallesController::class, 'create'])->name('gestion-salles.create');
-    Route::post('/gestion-salles', [GestionSallesController::class, 'store'])->name('gestion-salles.store');
-    Route::get('/gestion-salles/{salle}/edit', [GestionSallesController::class, 'edit'])->name('gestion-salles.edit');
-    Route::put('/gestion-salles/{salle}', [GestionSallesController::class, 'update'])->name('gestion-salles.update');
-    Route::delete('/gestion-salles/{salle}', [GestionSallesController::class, 'destroy'])->name('gestion-salles.destroy');
-
-
-
-    // Partie USERS
-    Route::get('/user', [UserController::class, 'index'])->name('user.index');
-
-    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('/user', [UserController::class, 'store'])->name('user.store');
-    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('/create', [StudentController::class, 'create'])->name('create');
+        Route::post('/', [StudentController::class, 'store'])->name('store');
+        Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+        Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+        Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

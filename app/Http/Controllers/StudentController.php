@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 
-class UserController extends Controller
+class StudentController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $students = Student::all();
 
-        return view('user.index', compact('users'));
+        return view('user.index', compact('students'));
     }
 
     public function create()
@@ -23,11 +23,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:users',
-            'badge' => 'required|unique:users|max:25',
+            'name' => 'required|unique:students',
+            'badge' => 'required|unique:students|max:25',
         ]);
 
-        $newuser = User::create([
+        $newstudent = Student::create([
             'name' => $request->name,
             'badge' => $request->badge,
         ]);
@@ -35,19 +35,19 @@ class UserController extends Controller
         return redirect('/user')->with('success', 'Utilisateur ajouté avec succès!');
     }
 
-    public function edit(User $user)
+    public function edit(Student $student)
     {
-        return view('user.edit', compact('user'));
+        return view('user.edit', compact('student'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, Student $student)
     {
         $request->validate([
-            'name' => 'required|unique:users,name,' . $user->id,
-            'badge' => 'unique:users,badge,' . $user->id,
+            'name' => 'required|unique:students,name,' . $student->id,
+            'badge' => 'unique:students,badge,' . $student->id,
         ]);
 
-        $user->update([
+        $student->update([
             'name' => $request->name,
             'badge' => $request->badge,
         ]);
@@ -55,9 +55,9 @@ class UserController extends Controller
         return redirect('/user')->with('success', 'Utilisateur mis à jour avec succès!');
     }
 
-    public function destroy(User $user)
+    public function destroy(Student $student)
     {
-        $user->delete();
+        $student->delete();
 
         return redirect('/user')->with('success', 'Utilisateur supprimé avec succès!');
     }

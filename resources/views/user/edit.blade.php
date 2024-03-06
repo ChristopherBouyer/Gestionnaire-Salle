@@ -10,9 +10,8 @@
 
         .container {
             max-width: 800px;
-            margin: 20px auto; /* Ajout de l'espace en haut */
+            margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
@@ -31,6 +30,7 @@
             display: block;
             font-size: 0.875rem;
             margin-bottom: 0.25rem;
+            color: white;
         }
 
         input {
@@ -40,6 +40,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 4px;
             font-size: 1rem;
+            color: white;
         }
 
         .custom-button {
@@ -50,31 +51,33 @@
             cursor: pointer;
             transition: background-color 0.3s;
             display: inline-block;
-            border: none; /* Ajout de cette ligne pour supprimer le style du bouton par défaut */
+            border: none;
         }
 
         .custom-button:hover {
-            background-color: #00583e; /* Nouvelle couleur de fond au survol */
+            background-color: #00583e;
         }
     </style>
 @endsection
 
 @section('content')
-    <div class="container mx-auto bg-white p-4 shadow-md mb-4">
-        <h2 class="text-2xl font-semibold">Mettre à jour l'utilisateur {{ $user->name }}</h2>
+    <div class="container mx-auto dark:bg-gray-800 p-4 shadow-md mb-4">
+        <h2 class="text-2xl font-semibold">Mettre à jour l'étudiant {{ $student->name }}</h2>
 
-        <form action="{{ route('user.update', $user->id) }}" method="post">
+        <form action="{{ route('user.update', $student->id) }}" method="post">
             @csrf
             @method('PUT')
-            
+
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Nom de l'utilisateur:</label>
-                <input type="text" name="name" value="{{ $user->name }}" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                <label for="name" class="block text-sm font-medium">Nom de l'utilisateur:</label>
+                <input type="text" name="name" value="{{ $student->name }}" required
+                    class="dark:bg-gray-800 mt-1 p-2 border border-gray-300 rounded-md w-full">
             </div>
 
             <div class="mb-4">
-                <label for="badge" class="block text-sm font-medium text-gray-700">Badge:</label>
-                <input type="text" name="badge" value="{{ $user->badge }}" class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                <label for="badge" class="block text-sm font-medium">Badge:</label>
+                <input type="text" name="badge" value="{{ $student->badge }}"
+                    class="dark:bg-gray-800 mt-1 p-2 border border-gray-300 rounded-md w-full">
             </div>
 
             <button type="submit" class="custom-button">Mettre à jour</button>
