@@ -7,7 +7,8 @@ use App\Http\Controllers\GestionSallesController;
 use App\Http\Controllers\StudentController;
 
 Route::get('/', [GestionSallesController::class, 'index']);
-Route::match(['get', 'post'], '/apirequest', [ApiController::class, 'index']);
+
+Route::post('/apirequest', [ApiController::class, 'index']);
 
 Route::get('/gestion-salles', [GestionSallesController::class, 'index'])->name('gestion-salles.index');
 
@@ -15,6 +16,8 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('gestion-salles')->name('gestion-salles.')->group(function () {
         Route::get('/create', [GestionSallesController::class, 'create'])->name('create');
+        Route::get('/salles/{id}', [GestionSallesController::class, 'show'])->name('show');
+
         Route::post('/', [GestionSallesController::class, 'store'])->name('store');
         Route::get('/{salle}/edit', [GestionSallesController::class, 'edit'])->name('edit');
         Route::put('/{salle}', [GestionSallesController::class, 'update'])->name('update');

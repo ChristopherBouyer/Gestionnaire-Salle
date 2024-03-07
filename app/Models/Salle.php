@@ -13,6 +13,6 @@ class Salle extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_salle', 'salle_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_salle', 'salle_id', 'student_id');
     }
 }

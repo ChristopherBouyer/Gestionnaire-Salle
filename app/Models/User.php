@@ -43,10 +43,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-
-    public function salles()
-    {
-        return $this->belongsToMany(Salle::class, 'user_salle', 'user_id', 'salle_id');
-    }
 }

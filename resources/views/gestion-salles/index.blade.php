@@ -25,10 +25,11 @@
         }
 
         .roomCard {
-            border-radius: 8px;
             display: flex;
             align-items: center;
+            border-radius: 8px;
             column-gap: 15px;
+            color: black;
         }
 
         .success-message {
@@ -57,6 +58,7 @@
             color: #ffffff;
         }
 
+        .btn-show,
         .btn-edit,
         .btn-delete {
             display: inline-block;
@@ -68,6 +70,11 @@
             transition: background-color 0.3s;
         }
 
+        .btn-show {
+            background-color: #17a61c;
+            color: #ffffff;
+        }
+
         .btn-edit {
             background-color: #f39c12;
             color: #ffffff;
@@ -76,6 +83,10 @@
         .btn-delete {
             background-color: #e74c3c;
             color: #ffffff;
+        }
+
+        .btn-show:hover {
+            background-color: #1f8c23;
         }
 
         .btn-edit:hover {
@@ -119,7 +130,7 @@
                 <thead>
                     <tr>
                         <th>Nom salle</th>
-                        <th>Nombre de places prises</th>
+                        <th>Nombre de places</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -127,11 +138,13 @@
                     @forelse($salles as $salle)
                         <tr>
                             <td>{{ $salle->nom }}</td>
-                            <td>{{ $salle->actual_user }}/{{ $salle->max_user }}</td>
+                            <td>Il reste {{ $salle->max_user - $salle->actual_user }} places</td>
                             <td>
                                 <div class="space-x-2">
+                                    <a href="{{ route('gestion-salles.show', $salle->id) }}" class="btn-show">Voir</a>
                                     <a href="{{ route('gestion-salles.edit', $salle->id) }}" class="btn-edit">Modifier</a>
-                                    <form action="{{ route('gestion-salles.destroy', $salle->id) }}" method="post" class="inline">
+                                    <form action="{{ route('gestion-salles.destroy', $salle->id) }}" method="post"
+                                        class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete">Supprimer</button>
@@ -166,7 +179,7 @@
                         </svg>
                         <div>
                             <h3 class="text-lg font-semibold">{{ $salle->nom }}</h3>
-                            <p>{{ $salle->actual_user }}/{{ $salle->max_user }}</p>
+                            <p>Il reste {{ $salle->max_user - $salle->actual_user }} places</p>
                         </div>
                     </div>
                 @endforeach

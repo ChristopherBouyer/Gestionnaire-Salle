@@ -21,13 +21,13 @@ class ApiController extends Controller
 
                 if ($student) {
                     if ($student->salles()->where('salle_id', $salle->id)->exists()) {
-                        $student->salles()->detach($salle->id);
+                        $student->salles()->updateExistingPivot($salle->id, ['departure' => now()]);
                         $salle->actual_user -= 1;
                         $salle->save();
                         return response()->json(['name' => $student->name, 'exit' => true], 200);
                     } else {
                         if ($salle->actual_user < $salle->max_user) {
-                            $student->salles()->attach($salle->id);
+                            $student->salles()->attach($salle->id, ['arrival' => now()]);
                             $salle->actual_user += 1;
                             $salle->save();
                             return response()->json(['name' => $student->name, 'exit' => false], 200);

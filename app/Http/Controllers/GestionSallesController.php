@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Salle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class GestionSallesController extends Controller
@@ -14,6 +15,20 @@ class GestionSallesController extends Controller
 
         return view('gestion-salles.index', compact('salles'));
     }
+
+
+    public function show($id)
+    {
+        $salle = Salle::with('users')->findOrFail($id);
+
+        $logs = DB::table('user_salle')
+            ->join('students', 'user_salle.student_id', '=', 'students.id')
+            ->where('user_salle.salle_id', $id)
+            ->get(['user_salle.*', 'students.name as student_name']);
+
+        return view('gestion-salles.show', compact('salle', 'logs'));
+    }
+
 
     public function create()
     {
