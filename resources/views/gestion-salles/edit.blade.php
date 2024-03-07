@@ -87,6 +87,12 @@
                     class="dark:bg-gray-800 mt-1 p-2 border border-gray-300 rounded-md w-full">
             </div>
 
+            <div class="mb-4">
+                <label for="is_reserved" class="block text-sm font-medium ">Salle réservée:</label>
+                <input type="checkbox" name="is_reserved" value="1" {{ $salle->is_reserved ? 'checked' : '' }}
+                    class="dark:bg-gray-800 mt-1 p-2 border border-gray-300 rounded-md">
+            </div>
+
             <button type="submit" class="custom-button">Mettre à jour</button>
         </form>
     </div>

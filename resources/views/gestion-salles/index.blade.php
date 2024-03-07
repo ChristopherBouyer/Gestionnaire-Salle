@@ -29,6 +29,7 @@
             display: flex;
             align-items: center;
             column-gap: 15px;
+            color: black;
         }
 
         .success-message {
@@ -127,7 +128,16 @@
                     @forelse($salles as $salle)
                         <tr>
                             <td>{{ $salle->nom }}</td>
-                            <td>{{ $salle->actual_user }}/{{ $salle->max_user }}</td>
+                            <td>
+                                @if ($salle->is_reserved)
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">OCCUPÉE</span>
+                                        <span class="italic text-xs">jusqu'à 16h</span>
+                                    </div>
+                                @else
+                                    {{ $salle->actual_user }}/{{ $salle->max_user }}
+                                @endif
+                                </td>
                             <td>
                                 <div class="space-x-2">
                                     <a href="{{ route('gestion-salles.edit', $salle->id) }}" class="btn-edit">Modifier</a>
@@ -158,17 +168,41 @@
 
             <div class="grid grid-cols-3 gap-4">
                 @foreach ($salles as $salle)
-                    <div class="roomCard bg-white p-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-12 h-12">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-                        </svg>
-                        <div>
-                            <h3 class="text-lg font-semibold">{{ $salle->nom }}</h3>
-                            <p>{{ $salle->actual_user }}/{{ $salle->max_user }}</p>
+                    @if ($salle->is_reserved)
+                        <div class="roomCard bg-white p-4 shadow-md justify-between ring-1 ring-red-500">
+                            <div class="flex gap-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-12 h-12">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                                <div class="my-auto">
+                                    <h3 class="text-lg font-semibold">{{ $salle->nom }}</h3>
+                                    {{-- <p>{{ $salle->actual_user }}/{{ $salle->max_user }}</p> --}}
+                                </div>
+                            </div>
+                            <div class="justify-end flex flex-col gap-1">
+                                <div class="bg-red-500 rounded-md p-2">
+                                    <span class="text-white font-semibold text-center">OCCUPÉE</span>
+                                </div>
+                                <span class="text-black italic text-sm text-center">jusqu'à 16h</span>
+                            </div>
+                        </div>    
+                    @else
+                        <div class="roomCard bg-white p-4 shadow-md justify-between">
+                            <div class="flex gap-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-12 h-12">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                                <div>
+                                    <h3 class="text-lg font-semibold">{{ $salle->nom }}</h3>
+                                    <p>{{ $salle->actual_user }}/{{ $salle->max_user }}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
         </div>

@@ -9,7 +9,11 @@ class Salle extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'system_id', 'max_user', 'actual_user'];
+    protected $fillable = ['nom', 'system_id', 'max_user', 'actual_user', 'is_reserved'];
+
+    protected $casts = [
+        'is_reserved' => 'boolean',
+    ];
 
     public function users()
     {
