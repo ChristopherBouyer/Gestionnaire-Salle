@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('system_id');
             $table->integer('max_user');
             $table->integer('actual_user');
+            $table->boolean('is_reserved')->default(false);
             $table->timestamps();
         });
     }

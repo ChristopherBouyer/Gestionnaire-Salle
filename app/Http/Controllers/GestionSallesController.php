@@ -11,7 +11,7 @@ class GestionSallesController extends Controller
 {
     public function index()
     {
-        $salles = Salle::all();
+        $salles = Salle::orderBy('is_reserved', 'asc')->get();
 
         return view('gestion-salles.index', compact('salles'));
     }
@@ -60,6 +60,8 @@ class GestionSallesController extends Controller
 
     public function update(Request $request, Salle $salle)
     {
+        $isReserved = $request->input('is_reserved', 0);
+
         $request->validate([
             'nom' => 'required|unique:salles,nom,' . $salle->id,
             'max_user' => 'required|integer|min:1',
@@ -68,6 +70,7 @@ class GestionSallesController extends Controller
         $salle->update([
             'nom' => $request->nom,
             'max_user' => $request->max_user,
+            'is_reserved' => $isReserved
         ]);
 
         return redirect('/')->with('success', 'Salle mise à jour avec succès!');
